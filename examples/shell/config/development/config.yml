@@ -1,0 +1,5 @@
+#
+# This would be the service configuration represented in YAML.
+#
+service:
+    key: value
