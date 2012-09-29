@@ -1,0 +1,53 @@
+#
+#  Default example jvm.conf that can be used to provide consistency across deployments
+# 
+
+# Make sure that encoding is set to UTF-8 properly otherwise sun.jnu.encoding could be different
+-Dfile.encoding=UTF-8
+-Dsun.jnu.encoding=UTF-8
+
+# Make sure TZ is set explicitely rather than relying on JDK/Server as it is buggy
+-Duser.timezone=GMT
+
+# Make sure language is set to en_US properly
+-Duser.language=en
+-Duser.country=US
+-Duser.variant=
+
+# Default is 30s without security manager and infinite with one
+# Turn off DNS caching for good.
+#-Dsun.net.inetaddr.ttl=0
+#-Dsun.net.inetaddr.negative.ttl=0
+
+# As a default, it will block forever. Make sure it is not the case if not specified in code.
+-Dsun.net.client.defaultConnectTimeout=5000
+-Dsun.net.client.defaultReadTimeout=5000
+
+# Specify the RMI server to use localhost only otherwise you may not be able to access
+# things like JMX console via SSH forwarding
+-Djava.rmi.server.hostname=localhost
+-Djava.rmi.server.useLocalHostname=true
+
+# Make sure to always do a heap dump if there is an OOME. Always useful for forensic analysis
+-XX:+HeapDumpOnOutOfMemoryError
+#-XX:HeapDumpPath=./java_pid<pid>.hprof
+
+# VMs that experience an OutOfMemoryError can be left in an indeterministic state which can have adverse effects.
+# It is suitable to configure the JVMs to exit upon encountering an OOME instead of allowing the JVM to attempt recovery
+# "mail -s 'OOM on `hostname` at `date`' whoever@example.com <<< ''"
+-XX:OnOutOfMemoryError="kill -9 %p;"
+
+#
+# An example of using a script that would send a more detailed email notification that the service OOMed and was restarted.
+# Feel free to plug into your favorite notification system
+#-XX:OnOutOfMemoryError='/opt/service/java/kill_notify.sh %p'
+
+# What to do on fatal error ?. Restart the JVM.
+-XX:OnError="kill -9 %p;"
+#-XX:ErrorFile=./hs_err_pid<pid>.log
+
+# Saves jvmstat binary data on exit.
+#-XX:+PerfSaveDataToFile
+
+# Always display version at startup
+-showversion

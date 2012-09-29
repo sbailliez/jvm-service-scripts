@@ -1,0 +1,7 @@
+agent libraries such as newrelic should end up here
+
+For simplicity, your build system should end up writing a consistent name as a jar file.
+For example for newrelic, Apache Ivy can be used to consistently retrieve the artifact name as newrelic.jar, no matter the version.
+
+YMMV depending on your build system.
+
